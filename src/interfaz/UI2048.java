@@ -24,6 +24,8 @@ import javax.swing.border.TitledBorder;
 
 import logica.Juego2048;
 
+
+
 public class UI2048 {
 
 	private JFrame frame;
@@ -93,9 +95,8 @@ public class UI2048 {
 		puntaje.setForeground(new Color(250, 248, 239));
 		puntaje.setFont(new Font("Tahoma", Font.BOLD, 14));
 		panelPuntaje.add(puntaje);
-		puntaje.setHorizontalAlignment(SwingConstants.CENTER);
-			
-		JLabel valorpuntaje = new JLabel("0");
+		puntaje.setHorizontalAlignment(SwingConstants.CENTER);	
+		JLabel valorpuntaje = new JLabel(juego2048.obtenerPuntos());
 		valorpuntaje.setForeground(new Color(255, 255, 255));
 		valorpuntaje.setFont(new Font("Tahoma", Font.BOLD, 14));
 		panelPuntaje.add(valorpuntaje);
@@ -113,7 +114,7 @@ public class UI2048 {
 		Turno.setFont(new Font("Tahoma", Font.BOLD, 14));
 		panelturno.add(Turno);
 			
-		JLabel nroturno = new JLabel(""+juego2048.obtenerTurno());
+		JLabel nroturno = new JLabel(juego2048.obtenerTurno());
 		nroturno.setForeground(new Color(255, 255, 255));
 		nroturno.setFont(new Font("Tahoma", Font.BOLD, 14));
 		panelturno.add(nroturno);
@@ -159,29 +160,29 @@ public class UI2048 {
                         case KeyEvent.VK_UP:
                             if (juego2048.mover(1)) {
                                 juego2048.agregarNumero();
-                                actualizarTablero(juego2048.obtenerTablero());
-                                verificarEstadoJuego();
+                                actualizarTablero(juego2048.obtenerTablero(),valorpuntaje, nroturno);
+                                verificarEstadoJuego(valorpuntaje, nroturno);
                             }
                             break;
                         case KeyEvent.VK_DOWN:
                             if (juego2048.mover(2)) {
                                 juego2048.agregarNumero();
-                                actualizarTablero(juego2048.obtenerTablero());
-                                verificarEstadoJuego();
+                                actualizarTablero(juego2048.obtenerTablero(),valorpuntaje, nroturno);
+                                verificarEstadoJuego(valorpuntaje, nroturno);
                             }
                             break;
                         case KeyEvent.VK_LEFT:
                             if (juego2048.mover(3)) {
                                 juego2048.agregarNumero();
-                                actualizarTablero(juego2048.obtenerTablero());
-                                verificarEstadoJuego();
+                                actualizarTablero(juego2048.obtenerTablero(),valorpuntaje, nroturno);
+                                verificarEstadoJuego(valorpuntaje, nroturno);
                             }
                             break;
                         case KeyEvent.VK_RIGHT:
                             if (juego2048.mover(4)) {
                                 juego2048.agregarNumero();
-                                actualizarTablero(juego2048.obtenerTablero());
-                                verificarEstadoJuego();
+                                actualizarTablero(juego2048.obtenerTablero(),valorpuntaje,nroturno);
+                                verificarEstadoJuego(valorpuntaje, nroturno);
                             }
                             break;
                     }
@@ -219,15 +220,38 @@ public class UI2048 {
 		
 	}
 	
-    private void verificarEstadoJuego() {
-        if (juego2048.verificarVictoria()) {
-            JOptionPane.showMessageDialog(frame, "¡Felicidades! Has alcanzado el número 2048. ¡Has ganado!", "¡Victoria!", JOptionPane.INFORMATION_MESSAGE);
-        } else if (juego2048.verificarDerrota()) {
-            JOptionPane.showMessageDialog(frame, "¡Lo siento! No hay más movimientos posibles. ¡Has perdido!", "¡Derrota!", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+	private void verificarEstadoJuego(JLabel valorpuntaje, JLabel nroturno) {
+	    if (juego2048.verificarVictoria()) {
+	        JOptionPane.showMessageDialog(frame, "¡Felicidades! Has alcanzado el número 2048. ¡Has ganado!", "¡Victoria!", JOptionPane.INFORMATION_MESSAGE);
+	    } else if (juego2048.verificarDerrota()) {
+	        JOptionPane.showMessageDialog(frame, "¡Lo siento! No hay más movimientos posibles. ¡Has perdido!", "¡Derrota!", JOptionPane.ERROR_MESSAGE);
+	        
+	        int choice = JOptionPane.showOptionDialog(
+	            frame,
+	            "¿Qué deseas hacer?",
+	            "Game Over",
+	            JOptionPane.YES_NO_OPTION,
+	            JOptionPane.QUESTION_MESSAGE,
+	            null,
+	            new String[]{"Volver a jugar", "Salir"},
+	            "Volver a jugar"
+	        );
+
+	        if (choice == JOptionPane.YES_OPTION) {
+	            juego2048.reiniciarJuego();
+//CORREGIR 	            
+	            // Actualizar los JLabels con los nuevos valores después de reiniciar el juego
+	            valorpuntaje.setText("0");
+	            nroturno.setText("0");
+	            actualizarTablero(juego2048.obtenerTablero(), valorpuntaje, nroturno);	            
+	        } else {
+	            System.exit(0);
+	        }
+	    }
+	}
+
     
-    public void actualizarTablero(int[][] tablero) {
+    public void actualizarTablero(int[][] tablero,JLabel valorpuntaje, JLabel nroturno) {
         for (int fila = 0; fila < 4; fila++) {
             for (int columna = 0; columna < 4; columna++) {
                 JLabel etiqueta = tableroIG[fila][columna];
@@ -235,7 +259,12 @@ public class UI2048 {
                 actualizarEtiqueta(etiqueta, valor);
             }
         }
+        
+        // Actualizar el puntaje después de actualizar el tablero
+        valorpuntaje.setText(juego2048.obtenerPuntos());
+        nroturno.setText(juego2048.obtenerTurno());
     }
+
 
     private void actualizarEtiqueta(JLabel etiqueta, int valor) {
         if (valor == 0) {

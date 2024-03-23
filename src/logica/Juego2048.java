@@ -6,15 +6,20 @@ public class Juego2048 {
 	int TAMANO = 4;
 	int[][] tablero;
 	Random rand;
-	int turno;
+	Integer turno, puntos;
 	
 	public Juego2048() {
-		tablero = new int[4][4];
-		turno = 0;
-		agregarNumero();
-		agregarNumero();
+	    reiniciarJuego();
 	}
 	
+	public void reiniciarJuego() {
+		tablero = new int[4][4];
+		turno = 0;
+		puntos= 0;
+		agregarNumero();
+		agregarNumero();		
+	}
+
 	//Agregar numero 2 o 4;
 	
 	public void agregarNumero() {
@@ -33,18 +38,14 @@ public class Juego2048 {
 		// nextInt genera un entero entre 0 y 2, es decir   0 <= n <= 1
 		//Si quiero obtener un 2, multiplico por 2 (rand.nextInt(2)*2), 2.0 <=n<=1.2, entonces 0<=n<=2
 		//Si quiero obtener un 2 o un 4, sumo 2 (rand.nextInt(2)*2+2), entonces 2<=n<=4
-
-		
-		//Incremento el turno
-		turno++;
 	}
 	
 	public int[][] obtenerTablero(){
 		return tablero;
 	}
 	
-	public int obtenerTurno() {
-		return turno;
+	public String obtenerTurno() {
+		return turno.toString();
 	}
 	
 	 public boolean mover(int direccion) {
@@ -63,6 +64,7 @@ public class Juego2048 {
 	                movimientoValido = moverDerecha();
 	                break;
 	        }
+	        turno++;
 	        return movimientoValido;
 	    }
 	
@@ -97,6 +99,7 @@ public class Juego2048 {
 	                tablero[filaActual - 1][columna] *= 2;
 	                tablero[filaActual][columna] = 0;
 	                movimientoValido = true;
+	                sumarPuntos(tablero[filaActual - 1][columna]);
 	                break;
 	            }
 	        }
@@ -134,6 +137,7 @@ public class Juego2048 {
 	                tablero[fila][columnaActual - 1] *= 2;
 	                tablero[fila][columnaActual] = 0;
 	                movimientoValido = true;
+	                sumarPuntos(tablero[fila][columnaActual-1]);
 	                break;
 	            }
 	        }
@@ -172,6 +176,7 @@ public class Juego2048 {
 	                tablero[fila][columnaActual + 1] *= 2;
 	                tablero[fila][columnaActual] = 0;
 	                movimientoValido = true;
+	                sumarPuntos(tablero[fila][columnaActual + 1]); // Corregido: usar el valor de la ficha actual
 	                break;
 	            }
 	        }
@@ -211,6 +216,7 @@ public class Juego2048 {
 	                tablero[filaActual + 1][columna] *= 2;
 	                tablero[filaActual][columna] = 0;
 	                movimientoValido = true;
+	                sumarPuntos(tablero[filaActual + 1][columna]); // Corregido: usar el valor de la ficha actual
 	                break;
 	            }
 	        }
@@ -245,6 +251,13 @@ public class Juego2048 {
 	        return true; // No hay movimientos válidos posibles
 	    }
 	    
+	    private void sumarPuntos(int valor) {
+	        // Sumar puntos dependiendo del valor de la combinación
+	        puntos += valor;
+	    }
 	    
+	    public String obtenerPuntos() {
+	        return puntos.toString();
+	    }
 	
 }
