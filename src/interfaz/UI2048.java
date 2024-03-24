@@ -72,7 +72,7 @@ public class UI2048 {
 		
 		//VENTANA 
 		frame = new JFrame(); //Creo la ventana
-		frame.setBounds(100, 100, 400, 400); // (posicionx,PosicionY,ancho,altura)
+		frame.setBounds(100, 100, 400, 500); // (posicionx,PosicionY,ancho,altura)
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Para que la aplicacion se cierre correctamente cuando el usuario la quita
 		frame.setTitle("Juego 2048 - Lucas, Franco, Joaquin, Jonathan"); 
 		frame.setResizable(false);// Evito que lo puedan redimenzionar
