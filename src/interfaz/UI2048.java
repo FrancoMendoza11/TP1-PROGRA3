@@ -8,7 +8,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import java.awt.GridLayout;
@@ -22,16 +21,14 @@ import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.awt.Dimension;
 
-import javax.swing.border.TitledBorder;
 
 import logica.Juego2048;
 
-
-
 public class UI2048 {
-
 	private JFrame frame;
 	private JLabel[][] tableroIG;
+	private JLabel nroTurno;
+	private JLabel valorPuntaje;
 	private Juego2048 juego2048;
     private boolean movimientoProcesado;
 	
@@ -69,12 +66,12 @@ public class UI2048 {
 	private void iniciarMenu() {
 	    // Inicializo el juego
 	    
-	    //VENTANA 
+	    // VENTANA 
 	    frame = new JFrame(); //Creo la ventana
-	    frame.setTitle("Juego 2048 - Lucas, Franco, Joaquin, Jonathan"); 
-	    frame.setBounds(100, 100, 400, 400); // (posicionx,PosicionY,ancho,altura)
+	    frame.setTitle("Juego 2048"); 
+	    frame.setBounds(100, 100, 400, 500); // (PosicionX, PosicionY, Ancho, Altura)
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Para que la aplicacion se cierre correctamente cuando el usuario la quita
-	    frame.setResizable(false);// Evito que lo puedan redimensionar
+	    frame.setResizable(false); // Evito que lo puedan redimensionar
 	    
 	    // Panel principal
 	    JPanel panelPrincipal = new JPanel();
@@ -141,11 +138,9 @@ public class UI2048 {
 	    frame.setVisible(true);
 	}
 
-
-
 	private void iniciarJuego() {
-		
 		// Inicializo el juego
+		
 		juego2048 = new Juego2048();
 		movimientoProcesado = false;
 		
@@ -153,7 +148,7 @@ public class UI2048 {
 		frame = new JFrame(); //Creo la ventana
 		frame.setBounds(100, 100, 400, 500); // (posicionx,PosicionY,ancho,altura)
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Para que la aplicacion se cierre correctamente cuando el usuario la quita
-		frame.setTitle("Juego 2048 - Lucas, Franco, Joaquin, Jonathan"); 
+		frame.setTitle("Juego 2048"); 
 		frame.setResizable(false);// Evito que lo puedan redimenzionar
 	    frame.setLocationRelativeTo(null);   // Centrar la ventana en la pantalla
 		
@@ -176,10 +171,11 @@ public class UI2048 {
 		puntaje.setFont(new Font("Tahoma", Font.BOLD, 14));
 		panelPuntaje.add(puntaje);
 		puntaje.setHorizontalAlignment(SwingConstants.CENTER);	
-		JLabel valorpuntaje = new JLabel(juego2048.obtenerPuntos());
-		valorpuntaje.setForeground(new Color(255, 255, 255));
-		valorpuntaje.setFont(new Font("Tahoma", Font.BOLD, 14));
-		panelPuntaje.add(valorpuntaje);
+		
+		valorPuntaje = new JLabel(juego2048.obtenerPuntos());
+		valorPuntaje.setForeground(new Color(255, 255, 255));
+		valorPuntaje.setFont(new Font("Tahoma", Font.BOLD, 14));
+		panelPuntaje.add(valorPuntaje);
 	
 		//PANEL TURNO
 		JPanel panelturno = new JPanel();
@@ -194,10 +190,10 @@ public class UI2048 {
 		Turno.setFont(new Font("Tahoma", Font.BOLD, 14));
 		panelturno.add(Turno);
 			
-		JLabel nroturno = new JLabel(juego2048.obtenerTurno());
-		nroturno.setForeground(new Color(255, 255, 255));
-		nroturno.setFont(new Font("Tahoma", Font.BOLD, 14));
-		panelturno.add(nroturno);
+		nroTurno = new JLabel(juego2048.obtenerTurno());
+		nroTurno.setForeground(new Color(255, 255, 255));
+		nroTurno.setFont(new Font("Tahoma", Font.BOLD, 14));
+		panelturno.add(nroTurno);
 		
 		//TITULO 2048 JLABEL
 		JLabel titulo2048 = new JLabel("2048");
@@ -212,7 +208,6 @@ public class UI2048 {
 		panelMatriz.setBackground(new Color(187,173,160));
 		frame.getContentPane().add(panelMatriz, BorderLayout.CENTER);
 		panelMatriz.setLayout(new GridLayout(4,4));
-		
 		
 		//GENERACION DE CELDAS
 		tableroIG = new JLabel[4][4];
@@ -240,29 +235,29 @@ public class UI2048 {
                         case KeyEvent.VK_UP:
                             if (juego2048.mover(1)) {
                                 juego2048.agregarNumero();
-                                actualizarTablero(juego2048.obtenerTablero(),valorpuntaje, nroturno);
-                                verificarEstadoJuego(valorpuntaje, nroturno);
+                                actualizarValores(juego2048.obtenerTablero());
+                                verificarEstadoJuego();
                             }
                             break;
                         case KeyEvent.VK_DOWN:
                             if (juego2048.mover(2)) {
                                 juego2048.agregarNumero();
-                                actualizarTablero(juego2048.obtenerTablero(),valorpuntaje, nroturno);
-                                verificarEstadoJuego(valorpuntaje, nroturno);
+                                actualizarValores(juego2048.obtenerTablero());
+                                verificarEstadoJuego();
                             }
                             break;
                         case KeyEvent.VK_LEFT:
                             if (juego2048.mover(3)) {
                                 juego2048.agregarNumero();
-                                actualizarTablero(juego2048.obtenerTablero(),valorpuntaje, nroturno);
-                                verificarEstadoJuego(valorpuntaje, nroturno);
+                                actualizarValores(juego2048.obtenerTablero());
+                                verificarEstadoJuego();
                             }
                             break;
                         case KeyEvent.VK_RIGHT:
                             if (juego2048.mover(4)) {
                                 juego2048.agregarNumero();
-                                actualizarTablero(juego2048.obtenerTablero(),valorpuntaje,nroturno);
-                                verificarEstadoJuego(valorpuntaje, nroturno);
+                                actualizarValores(juego2048.obtenerTablero());
+                                verificarEstadoJuego();
                             }
                             break;
                     }
@@ -284,81 +279,54 @@ public class UI2048 {
 	
 	//ACTUALIZACION DE LOS VALORES DE LAS CELDAS
 	private void actualizarValores(int[][] tablero) {
-		//Recorro el tablero para obtener sus valores y en caso de tenerlos agregarlos a la interfaz grafica
-		for(int fila=0;fila<4;fila++) {
-			for(int columna=0;columna<4;columna++) {
-				
-				// Analizo valores
+		//Recorro el tablero para obtener sus valores y agregarlos a la interfaz grafica
+		for(int fila = 0; fila < 4 ; fila++) {
+			for(int columna = 0; columna < 4; columna++) {
 				if(tablero[fila][columna] == 0) {
 					 tableroIG[fila][columna].setText(""); // Dejo vacias las posiciones que no tienen valor.
 				}else {
-					tableroIG[fila][columna].setText(""+tablero[fila][columna]); //Le asigno el valor, convirtiendolo a string.
+					tableroIG[fila][columna].setText("" + tablero[fila][columna]); //Le asigno el valor, convirtiendolo a string.
 				}
-				
+				actualizarColorEtiqueta(tableroIG[fila][columna], tablero[fila][columna]);
 			}
 		}
-		
+		valorPuntaje.setText(juego2048.obtenerPuntos());
+        nroTurno.setText(juego2048.obtenerTurno());
+        
 	}
-	
-	private void verificarEstadoJuego(JLabel valorpuntaje, JLabel nroturno) {
+
+    private void actualizarColorEtiqueta(JLabel etiqueta, int valor) {
+        if (valor == 0) {
+            etiqueta.setBackground(Color.LIGHT_GRAY);
+        } else {
+        	int indiceColor = (int) (Math.log(valor) / Math.log(2)) - 1;
+            etiqueta.setBackground(COLORES_NUMEROS[indiceColor]);
+        }
+    }
+    
+	private void verificarEstadoJuego() {
 	    if (juego2048.verificarVictoria()) {
 	        JOptionPane.showMessageDialog(frame, "¡Felicidades! Has alcanzado el número 2048. ¡Has ganado!", "¡Victoria!", JOptionPane.INFORMATION_MESSAGE);
 	    } else if (juego2048.verificarDerrota()) {
-	        JOptionPane.showMessageDialog(frame, "¡Lo siento! No hay más movimientos posibles. ¡Has perdido!", "¡Derrota!", JOptionPane.ERROR_MESSAGE);
-	        
 	        int choice = JOptionPane.showOptionDialog(
 	            frame,
-	            "¿Qué deseas hacer?",
-	            "Game Over",
+	            "¡Perdiste! ¿Qué deseas hacer?",
+	            "¡Derrota!",
 	            JOptionPane.YES_NO_OPTION,
 	            JOptionPane.QUESTION_MESSAGE,
 	            null,
 	            new String[]{"Volver a jugar", "Salir"},
 	            "Volver a jugar"
 	        );
-
 	        if (choice == JOptionPane.YES_OPTION) {
 	            juego2048.reiniciarJuego();
-//CORREGIR 	            
-	            // Actualizar los JLabels con los nuevos valores después de reiniciar el juego
-	            valorpuntaje.setText("0");
-	            nroturno.setText("0");
-	            actualizarTablero(juego2048.obtenerTablero(), valorpuntaje, nroturno);	            
+	            valorPuntaje.setText("0"); // Actualizar los JLabels con los nuevos valores después de reiniciar el juego
+	            nroTurno.setText("0");
+	            actualizarValores(juego2048.obtenerTablero());	            
 	        } else {
 	            System.exit(0);
 	        }
 	    }
 	}
-
-    
-    public void actualizarTablero(int[][] tablero,JLabel valorPuntaje, JLabel nroTurno) {
-        for (int fila = 0; fila < 4; fila++) {
-            for (int columna = 0; columna < 4; columna++) {
-                JLabel etiqueta = tableroIG[fila][columna];
-                int valor = tablero[fila][columna];
-                actualizarEtiqueta(etiqueta, valor);
-            }
-        }
-        
-        // Actualizar el puntaje después de actualizar el tablero
-        valorPuntaje.setText(juego2048.obtenerPuntos());
-        nroTurno.setText(juego2048.obtenerTurno());
-    }
-
-
-    private void actualizarEtiqueta(JLabel etiqueta, int valor) {
-        if (valor == 0) {
-            etiqueta.setText("");
-            etiqueta.setBackground(Color.LIGHT_GRAY);
-        } else {
-            etiqueta.setText(Integer.toString(valor));
-            actualizarColorEtiqueta(etiqueta, valor);
-        }
-    }
-
-    private void actualizarColorEtiqueta(JLabel etiqueta, int valor) {
-        int indiceColor = (int) (Math.log(valor) / Math.log(2)) - 1;
-        etiqueta.setBackground(COLORES_NUMEROS[indiceColor]);
-    }
 
 }
