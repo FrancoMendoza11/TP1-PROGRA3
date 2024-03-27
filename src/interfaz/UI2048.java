@@ -12,6 +12,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.BorderLayout;
@@ -61,10 +63,87 @@ public class UI2048 {
 	}
 
 	public UI2048() {
-		initialize();
+		iniciarMenu();
 	}
 
-	private void initialize() {
+	private void iniciarMenu() {
+	    // Inicializo el juego
+	    
+	    //VENTANA 
+	    frame = new JFrame(); //Creo la ventana
+	    frame.setTitle("Juego 2048 - Lucas, Franco, Joaquin, Jonathan"); 
+	    frame.setBounds(100, 100, 400, 400); // (posicionx,PosicionY,ancho,altura)
+	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Para que la aplicacion se cierre correctamente cuando el usuario la quita
+	    frame.setResizable(false);// Evito que lo puedan redimensionar
+	    
+	    // Panel principal
+	    JPanel panelPrincipal = new JPanel();
+	    panelPrincipal.setBackground(new Color(0xEDE0C8)); // Color 4
+	    frame.getContentPane().add(panelPrincipal, BorderLayout.CENTER);
+	    panelPrincipal.setLayout(new BorderLayout(0, 0));
+
+	    // Panel de título
+	    JLabel lblTitulo = new JLabel("2048");
+	    lblTitulo.setFont(new Font("Tahoma", Font.BOLD, 150));
+	    lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+	    panelPrincipal.add(lblTitulo, BorderLayout.NORTH);
+
+	    // Panel de botones
+	    JPanel panelBotones = new JPanel();
+	    panelBotones.setBackground(new Color(0xEDE0C8)); 
+	    panelPrincipal.add(panelBotones, BorderLayout.CENTER);
+	    panelBotones.setLayout(new GridLayout(3, 1, 0, 15));
+
+	    // Botón Jugar
+	    JButton btnJugar = new JButton("Jugar");
+	    btnJugar.setPreferredSize(new Dimension(150, 50)); // Tamaño ajustado
+	    btnJugar.setBackground(new Color(0xF59563)); 
+	    btnJugar.setForeground(new Color(0xFFFFFF)); 
+	    btnJugar.setFont(new Font("Tahoma", Font.BOLD, 20)); // Fuente más grande
+	    btnJugar.addActionListener(new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	            frame.setVisible(false);
+	            iniciarJuego();
+	        }
+	    });
+	    panelBotones.add(btnJugar);
+
+	    // Botón Ranking
+	    JButton btnRanking = new JButton("Ranking");
+	    btnRanking.setPreferredSize(new Dimension(150, 50)); // Tamaño ajustado
+	    btnRanking.setBackground(new Color(0xEDC850)); 
+	    btnRanking.setForeground(new Color(0xFFFFFF)); 
+	    btnRanking.setFont(new Font("Tahoma", Font.BOLD, 20)); // Fuente más grande
+	    btnRanking.addActionListener(new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	            // Agrega aquí la funcionalidad para mostrar el ranking
+	            // Por ahora, no hará nada
+	        }
+	    });
+	    panelBotones.add(btnRanking);
+
+	    // Botón Salir
+	    JButton btnSalir = new JButton("Salir");
+	    btnSalir.setPreferredSize(new Dimension(150, 50)); // Tamaño ajustado
+	    btnSalir.setBackground(new Color(0xF65E3B)); 
+	    btnSalir.setForeground(new Color(0xFFFFFF)); 
+	    btnSalir.setFont(new Font("Tahoma", Font.BOLD, 20)); // Fuente más grande
+	    btnSalir.addActionListener(new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	            System.exit(0);
+	        }
+	    });
+	    panelBotones.add(btnSalir);
+
+	    // Centrar la ventana en la pantalla
+	    frame.setLocationRelativeTo(null);
+	    // Mostrar la ventana
+	    frame.setVisible(true);
+	}
+
+
+
+	private void iniciarJuego() {
 		
 		// Inicializo el juego
 		juego2048 = new Juego2048();
@@ -76,6 +155,7 @@ public class UI2048 {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Para que la aplicacion se cierre correctamente cuando el usuario la quita
 		frame.setTitle("Juego 2048 - Lucas, Franco, Joaquin, Jonathan"); 
 		frame.setResizable(false);// Evito que lo puedan redimenzionar
+	    frame.setLocationRelativeTo(null);   // Centrar la ventana en la pantalla
 		
 		//PANEL SUPERIOR
 		JPanel panelSuperior = new JPanel();
@@ -251,7 +331,7 @@ public class UI2048 {
 	}
 
     
-    public void actualizarTablero(int[][] tablero,JLabel valorpuntaje, JLabel nroturno) {
+    public void actualizarTablero(int[][] tablero,JLabel valorPuntaje, JLabel nroTurno) {
         for (int fila = 0; fila < 4; fila++) {
             for (int columna = 0; columna < 4; columna++) {
                 JLabel etiqueta = tableroIG[fila][columna];
@@ -261,8 +341,8 @@ public class UI2048 {
         }
         
         // Actualizar el puntaje después de actualizar el tablero
-        valorpuntaje.setText(juego2048.obtenerPuntos());
-        nroturno.setText(juego2048.obtenerTurno());
+        valorPuntaje.setText(juego2048.obtenerPuntos());
+        nroTurno.setText(juego2048.obtenerTurno());
     }
 
 
