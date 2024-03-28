@@ -340,6 +340,7 @@ public class UI2048 {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void cargarRanking() {
 		try {
 			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("ranking.txt"));
