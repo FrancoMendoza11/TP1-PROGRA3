@@ -190,6 +190,10 @@ public class Juego2048 {
 	public String obtenerPuntos() {
 		return puntos.toString();
 	}
+	
+	public int obtenerPuntosInt() {
+		return puntos;
+	}
 
 	public boolean verificarVictoria() {
 		for (int fila = 0; fila < TAMANO; fila++) {
