@@ -61,9 +61,170 @@ public class Juego2048 {
 		return movimientoValido;
 	}
 	
-	// ESTAS SON LAS QUE ESTABAN
-	// FALLAN PORQUE SUMAN VALORES DE MÁS (VER TESTS)
-	public boolean moverArriba() {
+	private boolean moverArriba() {
+	    boolean movimientoRealizado = false; // Inicializa la variable para indicar si se realizó algún movimiento durante el proceso
+	    for (int columna = 0; columna < TAMANO; columna++) { // Recorre todas las columnas del tablero    
+	        int filaActual = 0; // Inicializa la fila actual en 0
+	        for (int fila = 1; fila < TAMANO; fila++) { // Recorre todas las filas del tablero menos la 0
+	            if (tablero[fila][columna] != 0) { // Verifica si la casilla actual no está vacía (es diferente de 0)
+	                if (tablero[filaActual][columna] == 0) { // Verifica si la casilla superior a la actual actual está vacía (es igual a 0)
+	                    tablero[filaActual][columna] = tablero[fila][columna]; // Mueve el valor de la casilla actual a la casilla superior
+	                    tablero[fila][columna] = 0; // Vacía la casilla actual
+	                    movimientoRealizado = true; // Indica que se realizó un movimiento
+	                } 
+	                else if (tablero[filaActual][columna] == tablero[fila][columna]) { // Verifica si la casilla superior a la actual actual es igual al de la casilla actual
+	                    tablero[filaActual][columna] *= 2; // Duplica el valor de la casilla superior a la actual (se combinan)
+	                    tablero[fila][columna] = 0; // Vacía la casilla actual
+	                    movimientoRealizado = true; // Indica que se realizó un movimiento
+	                    sumarPuntos(tablero[filaActual][columna]); // Suma los puntos del valor duplicado
+	                    filaActual++; // Incrementa la fila actual para evitar fusiones duplicadas
+	                } 
+	                 else { // Si la casilla actual no es vacia pero no puede fusionarse con su superior
+	                    filaActual++; // Incrementamos la fila actual porque no podemos mover ningún valor allí
+	                    if (filaActual != fila) { // Si la fila actual no es igual a la fila actual del bucle exterior, movemos el valor de la casilla actual a la fila actual
+	                        tablero[filaActual][columna] = tablero[fila][columna]; // Movemos el valor de la casilla actual a la casilla superior
+	                        tablero[fila][columna] = 0; // Vaciamos la casilla original
+	                       movimientoRealizado = true; // Indicamos que se realizó un movimiento
+	                    }
+	                }
+	            }
+	        }
+	    }
+	    return movimientoRealizado; // Devuelve si se realizó algún movimiento durante el proceso
+	}
+
+	private boolean moverAbajo() {
+	    boolean movimientoRealizado = false;
+	    for (int columna = 0; columna < TAMANO; columna++) {
+	        int filaActual = TAMANO - 1;
+	        for (int fila = TAMANO - 2; fila >= 0; fila--) {
+	            if (tablero[fila][columna] != 0) {
+	                if (tablero[filaActual][columna] == 0) {
+	                    tablero[filaActual][columna] = tablero[fila][columna];
+	                    tablero[fila][columna] = 0;
+	                    movimientoRealizado = true;
+	                } else if (tablero[filaActual][columna] == tablero[fila][columna]) {
+	                    tablero[filaActual][columna] *= 2;
+	                    tablero[fila][columna] = 0;
+	                    movimientoRealizado = true;
+	                    sumarPuntos(tablero[filaActual][columna]);
+	                    filaActual--;
+	                } else {
+	                    filaActual--;
+	                    if (filaActual != fila) {
+	                        tablero[filaActual][columna] = tablero[fila][columna];
+	                        tablero[fila][columna] = 0;
+	                        movimientoRealizado = true;
+	                    }
+	                }
+	            }
+	        }
+	    }
+	    return movimientoRealizado;
+	}
+
+	private boolean moverIzquierda() {
+	    boolean movimientoRealizado = false;
+	    for (int fila = 0; fila < TAMANO; fila++) {
+	        int columnaActual = 0;
+	        for (int columna = 1; columna < TAMANO; columna++) {
+	            if (tablero[fila][columna] != 0) {
+	                if (tablero[fila][columnaActual] == 0) {
+	                    tablero[fila][columnaActual] = tablero[fila][columna];
+	                    tablero[fila][columna] = 0;
+	                    movimientoRealizado = true;
+	                } else if (tablero[fila][columnaActual] == tablero[fila][columna]) {
+	                    tablero[fila][columnaActual] *= 2;
+	                    tablero[fila][columna] = 0;
+	                    movimientoRealizado = true;
+	                    sumarPuntos(tablero[fila][columnaActual]);
+	                    columnaActual++;
+	                } else {
+	                    columnaActual++;
+	                    if (columnaActual != columna) {
+	                        tablero[fila][columnaActual] = tablero[fila][columna];
+	                        tablero[fila][columna] = 0;
+	                        movimientoRealizado = true;
+	                    }
+	                }
+	            }
+	        }
+	    }
+	    return movimientoRealizado;
+	}
+
+	private boolean moverDerecha() {
+	    boolean movimientoRealizado = false;
+	    for (int fila = 0; fila < TAMANO; fila++) {
+	        int columnaActual = TAMANO - 1;
+	        for (int columna = TAMANO - 2; columna >= 0; columna--) {
+	            if (tablero[fila][columna] != 0) {
+	                if (tablero[fila][columnaActual] == 0) {
+	                    tablero[fila][columnaActual] = tablero[fila][columna];
+	                    tablero[fila][columna] = 0;
+	                    movimientoRealizado = true;
+	                } else if (tablero[fila][columnaActual] == tablero[fila][columna]) {
+	                    tablero[fila][columnaActual] *= 2;
+	                    tablero[fila][columna] = 0;
+	                    movimientoRealizado = true;
+	                    sumarPuntos(tablero[fila][columnaActual]);
+	                    columnaActual--;
+	                } else {
+	                    columnaActual--;
+	                    if (columnaActual != columna) {
+	                        tablero[fila][columnaActual] = tablero[fila][columna];
+	                        tablero[fila][columna] = 0;
+	                        movimientoRealizado = true;
+	                    }
+	                }
+	            }
+	        }
+	    }
+	    return movimientoRealizado;
+	}
+
+	private void sumarPuntos(int valor) {
+		puntos += valor; // Sumar puntos dependiendo del valor de la combinación
+	}
+
+	public String obtenerPuntos() {
+		return puntos.toString();
+	}
+
+	public boolean verificarVictoria() {
+		for (int fila = 0; fila < TAMANO; fila++) {
+			for (int columna = 0; columna < TAMANO; columna++) {
+				if (tablero[fila][columna] == 2048) {
+					return true; // Se llegó el valor 2048
+				}
+			}
+		}
+		return false;
+	}
+
+	public boolean verificarDerrota() {
+		for (int fila = 0; fila < TAMANO; fila++) {
+			for (int columna = 0; columna < TAMANO; columna++) {
+				if (tablero[fila][columna] == 0) {
+					return false; // Hay espacios vacíos
+				}
+				if (fila < TAMANO - 1 && tablero[fila][columna] == tablero[fila + 1][columna]) {
+					return false; // Hay un movimiento posible en vertical
+				}
+				if (columna < TAMANO - 1 && tablero[fila][columna] == tablero[fila][columna + 1]) {
+					return false; // Hay una movimiento posible en horizontal
+				}
+			}
+		}
+		return true; // No hay movimientos posibles
+	}
+
+}
+
+//FUNCIONES DE MOVIMIENTO ANTERIORES QUE DAN ERROR EN LOS TEST YA QUE FUSIONAN NUMEROS DE MAS EN UN MISMO MOVIMEINTO
+//LAS FUNCIONES QUE ESTAN ACTUALMENTE EN EL CODIGO SON HORRIBLES PERO PARECEN FUNCIONAR BIEN
+/**
+public boolean moverArriba() {
 		boolean movimientoValido = false;
 		for (int columna = 0; columna < TAMANO; columna++) {
 			movimientoValido |= moverColumnaArriba(columna);
@@ -214,133 +375,4 @@ public class Juego2048 {
 		}
 		return movimientoValido;
 	}
-	
-	// ESTAS SON LAS FUNCIONES QUE HICE (JOAQUIN)
-	// FALLAN PORQUE SUMAN VALORES IGUALES AUNQUE HAYA OTRO EN EL MEDIO
-	/**
-	private boolean moverArriba() {
-	    boolean movimientoRealizado = false;
-	    for (int columna = 0; columna < TAMANO; columna++) {
-	        for (int fila = 0; fila < TAMANO - 1; fila++) {
-	            for (int siguienteFila = fila + 1; siguienteFila < TAMANO; siguienteFila++) {
-	                if (tablero[fila][columna] == 0 && tablero[siguienteFila][columna] != 0) {
-	                    tablero[fila][columna] = tablero[siguienteFila][columna];
-	                    tablero[siguienteFila][columna] = 0;
-	                    movimientoRealizado = true;
-	                } else if (tablero[fila][columna] != 0 && tablero[fila][columna] == tablero[siguienteFila][columna]) {
-	                    tablero[fila][columna] *= 2;
-	                    tablero[siguienteFila][columna] = 0;
-	                    movimientoRealizado = true;
-	                    sumarPuntos(tablero[fila][columna]);
-	                    break;
-	                }
-	            }
-	        }
-	    }
-	    return movimientoRealizado;
-	}
-
-	private boolean moverIzquierda() {
-	    boolean movimientoRealizado = false;
-	    for (int fila = 0; fila < TAMANO; fila++) {
-	        for (int columna = 0; columna < TAMANO - 1; columna++) {
-	            for (int siguienteColumna = columna + 1; siguienteColumna < TAMANO; siguienteColumna++) {
-	                if (tablero[fila][columna] == 0 && tablero[fila][siguienteColumna] != 0) {
-	                    tablero[fila][columna] = tablero[fila][siguienteColumna];
-	                    tablero[fila][siguienteColumna] = 0;
-	                    movimientoRealizado = true;
-	                } else if (tablero[fila][columna] != 0 && tablero[fila][columna] == tablero[fila][siguienteColumna]) {
-	                    tablero[fila][columna] *= 2;
-	                    tablero[fila][siguienteColumna] = 0;
-	                    movimientoRealizado = true;
-	                    sumarPuntos(tablero[fila][columna]);
-	                    break;
-	                }
-	            }
-	        }
-	    }
-	    return movimientoRealizado;
-	}
-
-	private boolean moverDerecha() {
-	    boolean movimientoRealizado = false;
-	    for (int fila = 0; fila < TAMANO; fila++) {
-	        for (int columna = TAMANO - 1; columna > 0; columna--) {
-	            for (int anteriorColumna = columna - 1; anteriorColumna >= 0; anteriorColumna--) {
-	                if (tablero[fila][columna] == 0 && tablero[fila][anteriorColumna] != 0) {
-	                    tablero[fila][columna] = tablero[fila][anteriorColumna];
-	                    tablero[fila][anteriorColumna] = 0;
-	                    movimientoRealizado = true;
-	                } else if (tablero[fila][columna] != 0 && tablero[fila][columna] == tablero[fila][anteriorColumna]) {
-	                    tablero[fila][columna] *= 2;
-	                    tablero[fila][anteriorColumna] = 0;
-	                    movimientoRealizado = true;
-	                    sumarPuntos(tablero[fila][columna]);
-	                    break;
-	                }
-	            }
-	        }
-	    }
-	    return movimientoRealizado;
-	}
-
-	private boolean moverAbajo() {
-	    boolean movimientoRealizado = false;
-	    for (int columna = 0; columna < TAMANO; columna++) {
-	        for (int fila = TAMANO - 1; fila > 0; fila--) {
-	            for (int filaAnterior = fila - 1; filaAnterior >= 0; filaAnterior--) {
-	                if (tablero[fila][columna] == 0 && tablero[filaAnterior][columna] != 0) {
-	                    tablero[fila][columna] = tablero[filaAnterior][columna];
-	                    tablero[filaAnterior][columna] = 0;
-	                    movimientoRealizado = true;
-	                } else if (tablero[fila][columna] != 0 && tablero[fila][columna] == tablero[filaAnterior][columna]) {
-	                    tablero[fila][columna] *= 2;
-	                    tablero[filaAnterior][columna] = 0;
-	                    movimientoRealizado = true;
-	                    sumarPuntos(tablero[fila][columna]);
-	                    break;
-	                }
-	            }
-	        }
-	    }
-	    return movimientoRealizado;
-	}
-	**/
-	
-	private void sumarPuntos(int valor) {
-		puntos += valor; // Sumar puntos dependiendo del valor de la combinación
-	}
-
-	public String obtenerPuntos() {
-		return puntos.toString();
-	}
-
-	public boolean verificarVictoria() {
-		for (int fila = 0; fila < TAMANO; fila++) {
-			for (int columna = 0; columna < TAMANO; columna++) {
-				if (tablero[fila][columna] == 2048) {
-					return true; // Se ha alcanzado el valor 2048
-				}
-			}
-		}
-		return false;
-	}
-
-	public boolean verificarDerrota() {
-		for (int fila = 0; fila < TAMANO; fila++) {
-			for (int columna = 0; columna < TAMANO; columna++) {
-				if (tablero[fila][columna] == 0) {
-					return false; // Hay espacios vacíos
-				}
-				if (fila < TAMANO - 1 && tablero[fila][columna] == tablero[fila + 1][columna]) {
-					return false; // Hay un movimiento posible en vertical
-				}
-				if (columna < TAMANO - 1 && tablero[fila][columna] == tablero[fila][columna + 1]) {
-					return false; // Hay una movimiento posible en horizontal
-				}
-			}
-		}
-		return true; // No hay movimientos posibles
-	}
-
-}
+**/

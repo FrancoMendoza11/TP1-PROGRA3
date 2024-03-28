@@ -292,7 +292,6 @@ public class UI2048 {
 		}
 		valorPuntaje.setText(juego2048.obtenerPuntos());
         nroTurno.setText(juego2048.obtenerTurno());
-        
 	}
 
     private void actualizarColorEtiqueta(JLabel etiqueta, int valor) {
@@ -303,30 +302,35 @@ public class UI2048 {
             etiqueta.setBackground(COLORES_NUMEROS[indiceColor]);
         }
     }
-    
-	private void verificarEstadoJuego() {
-	    if (juego2048.verificarVictoria()) {
-	        JOptionPane.showMessageDialog(frame, "¡Felicidades! Has alcanzado el número 2048. ¡Has ganado!", "¡Victoria!", JOptionPane.INFORMATION_MESSAGE);
-	    } else if (juego2048.verificarDerrota()) {
-	        int choice = JOptionPane.showOptionDialog(
-	            frame,
-	            "¡Perdiste! ¿Qué deseas hacer?",
-	            "¡Derrota!",
-	            JOptionPane.YES_NO_OPTION,
-	            JOptionPane.QUESTION_MESSAGE,
-	            null,
-	            new String[]{"Volver a jugar", "Salir"},
-	            "Volver a jugar"
-	        );
-	        if (choice == JOptionPane.YES_OPTION) {
-	            juego2048.reiniciarJuego();
-	            valorPuntaje.setText("0"); // Actualizar los JLabels con los nuevos valores después de reiniciar el juego
-	            nroTurno.setText("0");
-	            actualizarValores(juego2048.obtenerTablero());	            
-	        } else {
-	            System.exit(0);
-	        }
-	    }
-	}
 
+    private void verificarEstadoJuego() {
+        if (juego2048.verificarVictoria()) {
+            mostrarMensajeJuegoTerminado("¡Ganaste! ¿Qué deseas hacer?", "¡Victoria!", JOptionPane.INFORMATION_MESSAGE);
+        } else if (juego2048.verificarDerrota()) {
+            mostrarMensajeJuegoTerminado("¡Perdiste! ¿Qué deseas hacer?", "¡Derrota!", JOptionPane.ERROR_MESSAGE); 
+        }
+    }
+
+    private void mostrarMensajeJuegoTerminado(String mensaje, String titulo, int tipoMensaje) {
+        int choice = JOptionPane.showOptionDialog(
+            frame,
+            mensaje,
+            titulo,
+            JOptionPane.YES_NO_OPTION,
+            tipoMensaje,
+            null,
+            new String[]{"Volver a jugar", "Salir"},
+            "Volver a jugar"
+        );
+        if (choice == JOptionPane.YES_OPTION) {
+            juego2048.reiniciarJuego();
+            valorPuntaje.setText("0");
+            nroTurno.setText("0");
+            actualizarValores(juego2048.obtenerTablero());              
+        } else {
+            System.exit(0);
+        }
+    }
+
+    
 }
