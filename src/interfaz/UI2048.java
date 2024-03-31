@@ -20,11 +20,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.border.LineBorder;
+
 import java.awt.Color;
 import java.awt.Dimension;
 
@@ -37,7 +41,7 @@ public class UI2048 {
 	private JLabel valorPuntaje;
 	private Juego2048 juego2048;
 	private boolean movimientoProcesado;
-	private ArrayList<String> ranking;
+	private List<Map.Entry<String, Integer>> ranking;
 
 	private static final Color[] COLORES_NUMEROS = { new Color(0xFFFFFF), // Color 2
 			new Color(0xEDE0C8), // Color 4
@@ -80,7 +84,7 @@ public class UI2048 {
 																// el usuario la quita
 		frame.setResizable(false); // Evito que lo puedan redimensionar
 
-		this.ranking = new ArrayList<String>(10);
+		this.ranking = new ArrayList<>();
 
 		// Panel principal
 		JPanel panelPrincipal = new JPanel();
@@ -344,7 +348,7 @@ public class UI2048 {
 	private void cargarRanking() {
 		try {
 			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("ranking.txt"));
-			ranking = (ArrayList<String>) inputStream.readObject();
+			ranking = (List<Map.Entry<String, Integer>>) inputStream.readObject();
 			inputStream.close();
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
@@ -362,25 +366,46 @@ public class UI2048 {
 	}
 
 	private void mostrarRanking() {
-		// Creamos un String con los nombres del ranking
+		// Cargar el ranking
 		cargarRanking();
+
+		// Ordenar la lista en orden descendente según los valores (puntajes)
+		ranking.sort(Map.Entry.<String, Integer>comparingByValue().reversed());
+
+		// Construir la cadena de texto para mostrar el ranking
 		StringBuilder rankingString = new StringBuilder();
-		for (int i = 0; i < ranking.size(); i++) {
-			rankingString.append(i + 1).append(". ").append(ranking.get(i)).append("\n");
+		int position = 1;
+		for (Map.Entry<String, Integer> entry : ranking) {
+			rankingString.append(position).append(". ").append(entry.getKey()).append(": ").append(entry.getValue())
+					.append("\n");
+			position++;
 		}
 
-		// Mostramos el ranking en un JOptionPane
+		// Mostrar el ranking
 		JOptionPane.showMessageDialog(frame, rankingString.toString(), "Ranking", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	private void agregarAlRanking(String nombre, int puntaje) {
-		String entrada = nombre + ": " + puntaje;
-		ranking.add(entrada);
-		Collections.sort(ranking, Collections.reverseOrder()); // Ordenar el ranking en orden descendente
+		Map.Entry<String, Integer> ultimoJugador = new AbstractMap.SimpleEntry<>(nombre, puntaje);
+		ranking.add(ultimoJugador);
+
+		// Ordenar la lista en orden descendente según los valores (puntajes)
+		Collections.sort(ranking, Map.Entry.<String, Integer>comparingByValue().reversed());
+
+		// Mantener solo al top 1 y al último jugador si el ranking tiene más de 5
+		// integrantes
+		if (ranking.size() > 5) {
+			Map.Entry<String, Integer> top1 = ranking.get(0);
+			ranking.clear();
+			ranking.add(top1);
+			ranking.add(ultimoJugador);
+		}
+
+		guardarRanking(); // Guardar el ranking actualizado
 	}
 
 	private void consultarNombreParaRanking() {
-		String nombreJugador = JOptionPane.showInputDialog(frame,"Ingresa tu nombre:");
+		String nombreJugador = JOptionPane.showInputDialog(frame, "Ingresa tu nombre:");
 		agregarAlRanking(nombreJugador, juego2048.obtenerPuntosInt());
 		guardarRanking();
 	}

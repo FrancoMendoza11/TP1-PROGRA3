@@ -8,5 +8,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="C:/Users/Franco Mendoza/.p2/pool/plugins/org.eclipse.swt.win32.win32.x86_64_3.122.0.v20221123-2302.jar" sourcepath="C:/Users/Franco Mendoza/.p2/pool/plugins/org.eclipse.swt.win32.win32.x86_64_3.122.0.v20221123-2302.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Franco Mendoza/.p2/pool/plugins/com.ibm.icu_74.1.0.jar" sourcepath="C:/Users/Franco Mendoza/.p2/pool/plugins/com.ibm.icu_74.1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
